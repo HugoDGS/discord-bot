@@ -20,8 +20,11 @@ COGS = [
     "cogs.reminders",
 ]
 
+from utils.database import init_db
+
 @bot.event
 async def on_ready():
+    init_db()
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name=f"{PREFIX}help")
