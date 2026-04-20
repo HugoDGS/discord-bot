@@ -74,6 +74,21 @@ class Moderation(commands.Cog, name="Moderation"):
         deleted = await ctx.channel.purge(limit=amount + 1)
         msg = await ctx.send(f"Deleted {len(deleted) - 1} messages.", delete_after=4)
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        """Send a welcome embed when a new member joins."""
+        system_ch = member.guild.system_channel
+        if not system_ch:
+            return
+        embed = discord.Embed(
+            title=f"Welcome to {member.guild.name}!",
+            description=f"Hey {member.mention}, glad to have you here.",
+            color=discord.Color.green(),
+        )
+        embed.set_thumbnail(url=member.display_avatar.url)
+        embed.set_footer(text=f"Member #{member.guild.member_count}")
+        await system_ch.send(embed=embed)
+
     @kick.error
     @ban.error
     @timeout.error
